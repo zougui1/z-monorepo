@@ -1,0 +1,5 @@
+packages:
+  - 'src/common/config-packages/*'
+  - 'src/common/packages/*'
+  - 'src/projects/*/src/*/*'
+  - 'src/services/*/src/*/*'

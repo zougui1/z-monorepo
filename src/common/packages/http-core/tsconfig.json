@@ -1,0 +1,9 @@
+{
+  "extends": "@zougui/common.tsconfigs/package.tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.*"]
+}

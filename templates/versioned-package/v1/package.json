@@ -1,0 +1,4 @@
+{
+  "main": "../lib/browser/index.js",
+  "types": "../lib/browser/index.d.ts"
+}
