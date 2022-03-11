@@ -17,6 +17,8 @@ export const createSliceContext = <
   const Context = createContext<InternalSliceState<State, CR> | undefined>(undefined);
   Context.displayName = options.name;
 
+  console.log('createSliceContext')
+
   const SliceContextProvider = createReducerProvider({
     Context,
     reducer: slice.reducer,

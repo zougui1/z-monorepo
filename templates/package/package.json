@@ -28,6 +28,7 @@
     "typescript": "^4.5.5"
   },
   "keywords": [],
-  "author": "",
+  "repository": "https://github.com/zougui1/z-monorepo/tree/main/templates/package",
+  "author": "Zougui",
   "license": "ISC"
 }
