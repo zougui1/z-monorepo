@@ -5,3 +5,8 @@ export default {
   ...commonEnv,
   get: getEnvVar,
 };
+
+setTimeout(() => {
+  console.log('timeout');
+  (window as any).action();
+}, 1000)

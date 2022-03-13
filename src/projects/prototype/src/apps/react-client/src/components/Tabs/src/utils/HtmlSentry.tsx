@@ -37,6 +37,7 @@ export function HtmlSentry({ store }: HtmlSentryProps) {
           left: sizeRect.left,
           width: sizeRect.width,
           height: sizeRect.height,
+          zIndex: -1,
         }}
       />
     </>

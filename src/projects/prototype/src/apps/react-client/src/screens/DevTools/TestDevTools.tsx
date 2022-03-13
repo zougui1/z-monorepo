@@ -74,7 +74,6 @@ class ReactQuery<T = unknown> {
     const query = useQuery<T>({
       queryKey: this.queryKey,
       queryFn: this.queryFunction,
-
     });
 
     return query;

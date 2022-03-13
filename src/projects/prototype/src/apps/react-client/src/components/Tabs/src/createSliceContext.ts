@@ -18,6 +18,7 @@ export const createSliceContext = <
   Context.displayName = options.name;
 
   const SliceContextProvider = createReducerProvider({
+    name: options.name,
     Context,
     reducer: slice.reducer,
     actions: slice.actions,

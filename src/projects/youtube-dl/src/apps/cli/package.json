@@ -32,7 +32,7 @@
   "license": "ISC",
   "dependencies": {
     "@zougui/common.child-process": "workspace:^0.1.0",
-    "@zougui/common.env": "workspace:^0.3.1",
+    "@zougui/common.env": "workspace:^0.4.1",
     "chalk": "^4.1.2",
     "commander": "^9.0.0",
     "fs-extra": "^10.0.1",

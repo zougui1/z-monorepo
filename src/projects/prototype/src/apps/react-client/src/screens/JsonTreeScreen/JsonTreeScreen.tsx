@@ -1,10 +1,14 @@
-import { JsonTreeView } from '../../components/JsonTreeView';
+import { JsonTree } from '../../components/JsonTree';
 import { jsonData } from './data';
 
 export function JsonTreeScreen() {
   return (
     <>
-      <JsonTreeView value={jsonData} label="root" />
+      <JsonTree value={jsonData} label="root" />
     </>
   );
 }
+
+<div>
+<button>Actions</button>
+</div>

@@ -1,9 +1,9 @@
-import * as uuid from 'uuid';
+import { nanoid } from 'nanoid';
 
 import { useConst } from '../useConst';
 
 export const useId = (providedId?: string | undefined): string => {
-  const generatedId = useConst(() => uuid.v4());
+  const generatedId = useConst(() => nanoid());
   const id = providedId || generatedId;
 
   return id;

@@ -1,5 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { TabProps } from '@mui/material';
+import type { TabProps, BoxTypeMap } from '@mui/material';
+import type { OverrideProps } from '@mui/material/OverridableComponent';
 
 //import { createSliceContext } from '@zougui/common.react-utils';
 import { createSliceContext } from './src';
@@ -7,7 +8,7 @@ import { createSliceContext } from './src';
 export interface TabData {
   id: string;
   titleProps: TabProps;
-  panelProps: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+  panelProps: OverrideProps<BoxTypeMap<{}, 'div'>, 'div'>;
   defaultActive?: boolean;
   allyProps: {
     tabId: string;
@@ -16,10 +17,12 @@ export interface TabData {
 }
 
 export interface TabsState {
+  activeTabId: string,
   tabs: Record<string, TabData>;
 }
 
 export const initialState: TabsState = {
+  activeTabId: '',
   tabs: {},
 };
 
@@ -43,10 +46,12 @@ export const sliceContext = createSliceContext({
         },
       } as any;
     },
+
     removeTab: (state, action: PayloadAction<string>) => {
       const id = action.payload;
       delete state.tabs[id];
     },
+
     updateTab: (state, action: PayloadAction<Omit<TabData, 'allyProps'>>) => {
       const { id } = action.payload;
       const tab = state.tabs[id];
@@ -59,6 +64,10 @@ export const sliceContext = createSliceContext({
         ...tab,
         ...action.payload,
       } as any;
+    },
+
+    activateTab: (state, action: PayloadAction<{ id: string; }>) => {
+      state.activeTabId = action.payload.id;
     },
   },
 });

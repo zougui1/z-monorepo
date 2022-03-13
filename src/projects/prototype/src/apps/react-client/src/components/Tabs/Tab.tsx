@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { TabProps as MuiTabProps } from '@mui/material';
+import type { TabProps as MuiTabProps, BoxTypeMap } from '@mui/material';
+import type { OverrideProps } from '@mui/material/OverridableComponent';
 
 import { useTabsActions } from './context';
 import { useId } from '../../hooks';
@@ -41,7 +42,7 @@ export interface TabProps {
   id?: string | undefined;
   title: MuiTabProps['label'];
   titleProps?: Omit<MuiTabProps, 'label' | 'id'> | undefined;
-  panelProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> | undefined;
+  panelProps?: OverrideProps<BoxTypeMap<{}, 'div'>, 'div'> | undefined;
   disabled?: boolean | undefined;
   children?: React.ReactNode | undefined;
   defaultActive?: boolean | undefined;

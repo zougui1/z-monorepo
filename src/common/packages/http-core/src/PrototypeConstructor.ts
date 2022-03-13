@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 
-
 const buildSchemaFromRouteTemplate = (url: string) => {
   // removes empty strings which happens due to a trailing a slash
   const pathComponents = url.split('/').filter(Boolean);
@@ -26,3 +25,5 @@ const buildSchemaFromRouteTemplate = (url: string) => {
     return shape;
   }, {} as Record<string, any>);
 }
+
+yup.object()

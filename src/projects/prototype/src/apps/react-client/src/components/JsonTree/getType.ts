@@ -18,6 +18,24 @@ export const getType = (value: unknown): Types => {
   return typeof value;
 }
 
+export const isIterableType = (type: Types): boolean => {
+  return iterableObjectMap[type];
+}
+
+const iterableObjectMap = {
+  array: true,
+  iterable: true,
+  object: true,
+  string: false,
+  number: false,
+  boolean: false,
+  undefined: false,
+  null: false,
+  function: false,
+  bigint: false,
+  symbol: false,
+};
+
 export type Types =
   | 'array'
   | 'string'

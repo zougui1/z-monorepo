@@ -7,7 +7,7 @@ export function Entry(props: EntryProps) {
         fontSize: '1em',
         lineHeight: '1.7',
         outline: 'none',
-        wordBreak: 'break-word',
+        //wordBreak: 'break-word',
         ...(props.style || {}),
       }}
     />
