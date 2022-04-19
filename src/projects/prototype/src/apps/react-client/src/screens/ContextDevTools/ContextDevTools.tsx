@@ -13,6 +13,8 @@ export function ContextDevToolsPanel() {
   const [selectedAction, setSelectedAction] = useState<ActionData>();
   const forceUpdate = useForceUpdate();
 
+  const currentAction = selectedAction || contextLogs.actions[contextLogs.actions.length - 1];
+
   useEffect(() => {
     const unsubscribe = contextLogs.subscribe(forceUpdate);
 
@@ -30,7 +32,7 @@ export function ContextDevToolsPanel() {
       <Tabs debug={false}>
         <Tabs.Tab title="Actions" panelProps={{ sx: styles.tabPanel }}>
           <div>
-            toolbar
+            {/* TODO toolbar */}
           </div>
 
           <Box sx={styles.mainSection}>
@@ -43,16 +45,16 @@ export function ContextDevToolsPanel() {
             </Box>
 
             <Box sx={styles.contextsSubSection}>
-              <Visualizer action={selectedAction || contextLogs.actions[contextLogs.actions.length - 1]} />
+              {currentAction && <Visualizer action={currentAction} />}
             </Box>
           </Box>
 
           <div>
-            history
+            {/* TODO history */}
           </div>
 
           <div>
-            toolbar
+            {/* TODO toolbar */}
           </div>
         </Tabs.Tab>
       </Tabs>

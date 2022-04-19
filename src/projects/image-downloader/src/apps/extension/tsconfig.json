@@ -1,0 +1,10 @@
+{
+  "extends": "@zougui/common.tsconfigs/react-package.tsconfig.json",
+  "compilerOptions": {
+    "isolatedModules": false,
+    "types": ["node", "jest"],
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/manifest.json"]
+}

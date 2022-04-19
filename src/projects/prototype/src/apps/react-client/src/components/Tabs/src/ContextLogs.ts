@@ -1,9 +1,8 @@
 import { AnyAction } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
 
-import { replaceReactElements } from './utils';
 import type { Store } from './utils/Store';
-import type { ActionData, GroupedStackFrames } from '../../../screens/ContextDevTools/types';
+import type { ActionData } from '../../../screens/ContextDevTools/types';
 
 class ContextLogs {
   private id: number = 0;
@@ -35,7 +34,7 @@ class ContextLogs {
 
   registerStore = (store: Store): void => {
     this.contexts[store.name] ||= [];
-    this.contexts[store.name].push(store);
+    this.contexts[store.name]?.push(store);
     this.contextsActions.set(store, []);
     this.callListeners();
   }

@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 
+import { ms } from '@zougui/common.ms';
+
 import { styles } from './Visualizer.styles';
 import { getStackFrames, StackFrameGroup as StackFrameGroupType } from './utils';
 import type { ActionData } from '../types';
@@ -34,16 +36,6 @@ export function Visualizer({ action }: VisualizerProps) {
         <Box sx={styles.tabContent}>
           <JsonTree value={safeData.action} hideRoot />
         </Box>
-
-        <Box sx={styles.tabContent}>
-          <Typography component="span" color="text.primary">
-            <pre>
-              <code>
-                {JSON.stringify(action.timings, null, 2)}
-              </code>
-            </pre>
-          </Typography>
-        </Box>
       </Tabs.Tab>
 
       <Tabs.Tab title="Context" panelProps={{ sx: styles.tabPanel }}>
@@ -74,6 +66,22 @@ export function Visualizer({ action }: VisualizerProps) {
               sx={styles.collaspedStackFrameGroup}
             />
           ))}
+        </Box>
+      </Tabs.Tab>
+
+      <Tabs.Tab title="Perf" panelProps={{ sx: styles.tabPanel }}>
+        <Box sx={styles.tabContent}>
+          <Typography color="text.primary">
+            The action's reducer executed in <span>{ms(action.timings.reducers)}</span>
+          </Typography>
+
+          <Typography color="text.primary">
+            The side effects of the action executed in <span>{ms(action.timings.subscribers)}</span>
+          </Typography>
+
+          <Typography color="text.primary">
+            The action executed in a total of <span>{ms(action.timings.total)}</span>
+          </Typography>
         </Box>
       </Tabs.Tab>
     </Tabs>

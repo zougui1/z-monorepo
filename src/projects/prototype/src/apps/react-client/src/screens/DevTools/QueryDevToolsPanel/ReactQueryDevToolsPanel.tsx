@@ -117,7 +117,7 @@ export function ReactQueryDevtoolsPanel(): React.ReactElement {
 
               {!filter && (
                 <SortSelect
-                  sort={sort}
+                  sort={sort || ''}
                   sortDesc={sortDesc}
                   onSort={setSort}
                   onSortDesc={setSortDesc}

@@ -1,4 +1,5 @@
 import { diff } from 'deep-object-diff';
+import { nanoid } from 'nanoid';
 
 import { getType, Types, isIterableType } from './getType';
 
@@ -32,6 +33,7 @@ const createNode = ({ oldValue, newValue, differenceValue, label }: CreateNodeOp
   const isCompletelyDifferent = isIterableType(oldType) && isIterableType(newType) && isIterableType(differenceType);
 
   const basicNode = {
+    id: nanoid(),
     label,
     oldType,
     oldValue,

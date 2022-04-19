@@ -92,7 +92,7 @@ const groupFrames = (frames: ActionStackFrame[]): StackFrameGroup[] => {
     const frameType = getFrameType(frame);
 
     if (currentType === frameType) {
-      groups[groups.length - 1].frames.push(frame);
+      groups[groups.length - 1]?.frames.push(frame);
       continue;
     }
 

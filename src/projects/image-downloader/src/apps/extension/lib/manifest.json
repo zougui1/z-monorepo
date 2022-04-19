@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+    "name": "Image downloader",
+    "version": "1.0",
+    "description": "Download images",
+    "permissions": ["tabs"],
+    "icons": {
+        "48": "public/furry_icon-48.png"
+    },
+    "background": {
+        "scripts": ["background/index.js"]
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://*.furaffinity.net/*"],
+            "js": ["content/index.js"]
+        }
+    ]
+}

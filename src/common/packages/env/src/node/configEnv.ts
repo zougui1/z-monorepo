@@ -4,7 +4,7 @@ import isBrowser from 'is-browser';
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 
-import { WORKSPACE } from './nodeBaseEnv';
+import { WORKSPACE, APP_WORKSPACE } from './nodeBaseEnv';
 import { ROOT } from './constants';
 import { publicPrefix, reactAppPrefix } from '../prefixes';
 
@@ -29,6 +29,7 @@ export const configEnv = (configDir: string = ROOT, options?: EnvConfigOptions):
 
   const configDirs = [
     configDir,
+    APP_WORKSPACE,
     WORKSPACE,
   ];
 

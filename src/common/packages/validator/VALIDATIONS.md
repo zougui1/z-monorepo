@@ -1,0 +1,206 @@
+# Validations
+
+- any
+  - allow (underlying: type = unknown; high level decorators: type = *strict*)
+  - ~~alter~~: to study: need to be strictly typed
+  - ~~artifact~~: to study: unsure what this does
+  - ~~cast~~: to study: might be confusing with the typed class' properties
+  - ~~concat~~: unlikely: what happens if a property has conflicts between multiple schemas?
+  - ~~custom~~: future version
+  - ~~empty~~: unecessary
+  - ~~error~~: unwanted
+  - ~~example~~: future version
+  - ~~external~~: future version
+  - ~~extract~~: unecessary
+  - ~~failover~~: future version maybe
+  - ~~forbidden~~: to study: unsure if useful
+  - ~~fork~~: unecessary
+  - ~~id~~: to study: unsure if useful
+  - ~~keep~~: to study: unsure what this does
+  - ~~label~~: unecessary
+  - ~~message~~: future version
+  - ~~messages~~: future version maybe
+  - ~~meta~~: to study: unsure what this does
+  - ~~note~~: unecessary
+  - only: TODO
+  - __optional__: done
+  - prefs: TODO
+  - ~~presence~~: future version, useful with lazy loading
+  - raw: TODO
+  - __required__: done
+  - ~~result~~: future version maybe
+  - ~~rule~~: uncessary
+  - ~~ruleset~~: unecessary
+  - ~~shared~~: unecessary
+  - strict: TODO
+  - strip: TODO
+  - ~~tag~~: to study: unsure what this does
+  - ~~tailor~~: see `alter`
+  - unit: TODO
+  - ~~warn~~: future version
+  - ~~warning~~: unecessary
+  - ~~when~~: unwanted: too complex and brings risks of type unsafety
+- alternatives
+  - ~~conditional~~: unwanted
+  - ~~match~~: future version maybe
+  - try: TODO
+- array
+  - has: TODO
+  - ~~items~~: unecessary as it is specified through other decorators
+  - length: TODO
+  - max: TODO
+  - min: TODO
+  - ~~ordered~~: complex and unecessary
+  - single: TODO
+  - ~~sort~~: unecessary
+  - ~~sparse~~: future version maybe
+  - ~~unique~~: future version maybe
+- ~~binary~~: future version
+- boolean
+  - isBoolean
+    - options.falsy: values allowed as false (convert into false)
+    - options.truthy: values allowed as true (convert into true)
+    - options.sensitive: are falsy/truthy values case sensitive
+- date
+  - isDate: TODO
+  - ~~greater~~: unecessary (greater = min)
+  - isIso: TODO
+  - ~~less~~: unecessary (less = max)
+  - max: TODO
+  - min: TODO
+  - isTimestamp: TODO
+- ~~function~~: future version
+- ~~link~~: future version
+- number
+  - isNumber: TODO
+    - options.precision: decimals precision
+    - options.unsafe
+  - ~~greater~~: unecessary (greater = min)
+  - integer: TODO
+    - options.unsafe
+  - ~~less~~: unecessary (less = max)
+  - multiple: TOOD
+  - negative: TODO
+  - isPort: TODO
+  - positive: TODO
+  - sign: TODO
+- object
+  - isObject: TODO
+    - options.unknown: allow unknown keys (or not)
+  - ~~and~~: future version
+  - ~~append~~: unecessary (class extends)
+  - ~~assert~~: unecessary
+  - isInstance: TODO
+  - keys: to study: not sure what this does
+  - length: TODO
+  - max: TODO
+  - min: TODO
+  - ~~nand~~: future version
+  - ~~or~~: future version
+  - ~~oxor~~: future version
+  - ~~pattern~~: future version
+  - ~~ref~~: future version maybe
+  - isRegex: TODO
+  - ~~rename~~: future version maybe: to study: risk of type unsafety
+  - ~~schema~~: future version
+  - ~~with~~: future version
+  - ~~without~~: future version
+  - ~~xor~~: future version
+- string
+  - isString: TODO
+    - options.case: case sensitivity
+    - options.replace: replace a value with another
+    - options.trim: trim the value
+    - options.truncate: truncate the value if necessary
+  - isAlphaNum: TODO
+  - isBase64: TODO
+  - isCreditCard: TODO
+  - isDataUri: TODO
+  - isDomain: TODO
+  - isEmail: TODO
+  - isUuid: TODO
+  - isHex: TODO
+  - isHostname: TODO
+  - isIp: TODO
+  - isIsoDate: TODO
+  - isIsoDuration: TODO
+  - length: TODO
+  - max: TODO
+  - min: TODO
+  - ~~normalize~~ future version maybe
+  - regex (i.e. pattern): TODO
+  - isToken: TOOD
+  - isUri: TODO
+- ~~symbol~~: future version
+
+sync and async lazy options: future version
+
+## V0.1.0
+
+- [ ] any
+  - isOptional: __implemented, untested__
+  - options: __implemented, untested__
+  - isRequired: __implemented, untested__
+  - strict: __implemented, untested__
+  - strip: __implemented, untested__
+- alternatives
+  - try: TODO
+- array
+  - has: TODO
+  - length: TODO
+  - max: TODO
+  - min: TODO
+  - single: TODO
+- [ ] boolean
+  - [ ] isBoolean: __implemented, untested__
+    - options.falsy: values allowed as false (convert into false)
+    - options.truthy: values allowed as true (convert into true)
+    - options.sensitive: are falsy/truthy values case sensitive
+    - options.default: default value
+- date
+  - isDate
+  - isIso
+  - max
+  - min
+  - isTimestamp
+- [ ] number
+  - isNumber __implemented, untested__
+    - options.precision: decimals precision
+    - options.unsafe
+  - integer __implemented, untested__
+    - options.unsafe
+  - negative __implemented, untested__
+  - isPort __implemented, untested__
+  - positive __implemented, untested__
+  - sign __implemented, untested__
+- [ ] object
+  - isObject __implemented, untested__
+    - options.unknown: allow unknown keys (or not)
+    - options.min: minimum keys required (or not)
+    - options.max: maximum keys required (or not)
+  - isInstance __implemented, untested__
+  - isRegex __implemented, untested__
+- string
+  - isString
+    - options.case: case sensitivity
+    - options.replace: replace a value with another
+    - options.trim: trim the value
+    - options.truncate: truncate the value if necessary
+  - isAlphaNum
+  - isBase64
+  - isCreditCard
+  - isDataUri
+  - isDomain
+  - isEmail
+  - isUuid
+  - isHex
+  - isHostname
+  - isIp
+  - isIsoDate
+  - isIsoDuration
+  - length
+  - max
+  - min
+  - regex (i.e. pattern)
+  - isToken
+  - isUri

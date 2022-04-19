@@ -1,4 +1,4 @@
-import ms from 'ms';
+import { ms } from './ms';
 
 import type { DurationString } from './types';
 

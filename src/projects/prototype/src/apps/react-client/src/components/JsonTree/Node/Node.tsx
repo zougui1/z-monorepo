@@ -3,12 +3,15 @@ import { PrimitiveNode } from './PrimitiveNode';
 import { ComplexNode } from './ComplexNode';
 
 export const Node = ({ node, defaultExpanded, diffing }: any) => {
+  const hasChildren = node.children?.length > 0;
+  const isDifferent = !diffing || node.differenceValue !== undefined || node.newValue === undefined;
+  const hasUniqueChild = node.children?.length === 1;
 
   return (
     <Entry>
-      {node.children?.length
-        ? <ComplexNode node={node} defaultExpanded={defaultExpanded} diffing={diffing} />
-        : (!diffing || node.differenceValue !== undefined || node.newValue === undefined) && <PrimitiveNode node={node} diffing={diffing} />
+      {hasChildren
+        ? <ComplexNode node={node} defaultExpanded={defaultExpanded || hasUniqueChild} diffing={diffing} />
+        : isDifferent && <PrimitiveNode node={node} diffing={diffing} />
       }
     </Entry>
   )

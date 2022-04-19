@@ -14,9 +14,9 @@ export function JsonTree({
   if (hideRoot) {
     return (
       <div {...rest}>
-        {tree.children?.map((node: any, i: number) => (
+        {tree.children?.map((node: any) => (
           <JsonTree
-            key={node.label}
+            key={node.id}
             value={node.newValue}
             originalValue={node.oldValue}
             label={node.label}

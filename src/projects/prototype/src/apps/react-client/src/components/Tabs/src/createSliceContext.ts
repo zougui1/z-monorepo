@@ -1,5 +1,6 @@
 import { createContext } from 'react';
-import { createSlice, CreateSliceOptions, Slice, SliceCaseReducers, CaseReducerActions } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import type { CreateSliceOptions, Slice, SliceCaseReducers, CaseReducerActions } from '@reduxjs/toolkit';
 
 import { createReducerProvider, createSliceHooks, OverridenActions, SliceContextProviderProps } from './utils';
 import { InternalSliceState } from './types';

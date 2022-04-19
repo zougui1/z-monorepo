@@ -43,7 +43,7 @@ export const ComplexNode = ({ node, defaultExpanded, diffing }: any) => {
           {node.children.map((childNode: any) => (
             <Node
               {...childNode}
-              key={childNode.label}
+              key={childNode.id}
               node={childNode}
               diffing={diffing}
             />

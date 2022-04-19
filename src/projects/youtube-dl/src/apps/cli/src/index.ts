@@ -4,13 +4,15 @@ import { download } from './commands/download';
 
 const program = new Command();
 
-program.argument('<url...>');
+program.command('listen').action(async () => {
+  console.log('listen');
+});
 
 program
-  .command('*')
-  .action(async () => {
-    const [...urls] = program.args;
-    await download(urls);
+  .command('* <url...>')
+  .action(async (urls) => {
+    console.log('download', urls)
+    //await download(urls);
   });
 
 program.parseAsync();
