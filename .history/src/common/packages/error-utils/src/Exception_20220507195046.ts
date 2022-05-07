@@ -22,12 +22,6 @@ export class Exception<
     this.cause = getCause(error.cause) as RequiredCause<TCause>;
     this.version = error.version;
 
-    Object.defineProperty(this, 'stack', {
-      configurable: false,
-      enumerable: true,
-      writable: true,
-    });
-
     Error.captureStackTrace(this, this.constructor);
   }
 

@@ -6,46 +6,34 @@ import { getErrorMessage } from './getErrorMessage';
 export class Exception<
   TData extends UnknownObject = UnknownObject,
   TCause extends Cause | unknown | undefined = Cause | undefined,
-> extends Error {
+> /*extends Error */{
+  name: string;
+  message: string;
+  stack: string | undefined;
+  _stack: string | undefined;
   cause: RequiredCause<TCause>;
   code: string;
   data: TData;
-  date: Date = new Date();
+  date = new Date();
   version: SimpleVersion;
 
   constructor(error: ExceptionData<TData, TCause>) {
-    super(toFunction(error.message)({ data: error.data, cause: getCause(error.cause) as RequiredCause<TCause> }));
+    //super(toFunction(error.message)({ data: error.data, cause: getCause(error.cause) as RequiredCause<TCause> }));
+    const getMessage = toFunction(error.message);
 
+    this.message = getMessage({
+      data: error.data,
+      cause: getCause(error.cause) as RequiredCause<TCause>,
+    });
     this.name = error.name || this.constructor.name;
     this.code = error.code;
     this.data = error.data;
     this.cause = getCause(error.cause) as RequiredCause<TCause>;
     this.version = error.version;
 
-    Object.defineProperty(this, 'stack', {
-      configurable: false,
-      enumerable: true,
-      writable: true,
-    });
-
     Error.captureStackTrace(this, this.constructor);
-  }
 
-  toJSON(): ExceptionObject<TData, TCause> {
-    const cause = this.cause instanceof Exception
-      ? this.cause.toJSON()
-      : this.cause;
-
-    return {
-      cause,
-      name: this.name,
-      message: this.message,
-      stack: this.stack,
-      code: this.code,
-      data: this.data,
-      date: this.date,
-      version: this.version,
-    };
+    this._stack = this.stack;
   }
 }
 
@@ -107,18 +95,4 @@ export interface ErrorContext<
 > {
   data: TData;
   cause: RequiredCause<TCause>;
-}
-
-export interface ExceptionObject<
-  TData extends UnknownObject = UnknownObject,
-  TCause extends Cause | unknown | undefined = Cause | undefined,
-  > {
-  name: string;
-  message: string;
-  stack: string | undefined;
-  cause: RequiredCause<TCause>;
-  code: string;
-  data: TData;
-  date: Date;
-  version: SimpleVersion;
 }

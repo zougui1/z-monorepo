@@ -29,6 +29,10 @@ export class Exception<
     });
 
     Error.captureStackTrace(this, this.constructor);
+
+    process.nextTick(() => {
+      this.stack = this.stack;
+    });
   }
 
   toJSON(): ExceptionObject<TData, TCause> {
