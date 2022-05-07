@@ -6,6 +6,8 @@ import mime from 'mime-types';
 import { UnprocessedMediaDocument, OptimizedMedia } from '@zougui/image-downloader.database';
 import { getFileSize, getFileHashAndType } from '@zougui/common.fs-utils';
 import { promiseAll } from '@zougui/common.promise-utils';
+import { createException } from '@zougui/common.error-utils';
+import { createTaskLogs } from '@zougui/log.logger';
 
 import { downloadMedia } from './downloadMedia';
 import { optimizeImage } from './optimizeImage';
@@ -20,6 +22,7 @@ export const getMediaFileMetadata = async (media: UnprocessedMediaDocument): Pro
   });
 
   // TODO delete the file at `filePath` if an error occurs
+  // TODO delete all files that were created (optimizedImages) if an error occurs
   const { result, fileSize, fileStat, optimizedImages } = await promiseAll({
     result: getFileHashAndType(filePath, {
       failsafePath: media.downloadUrl,
