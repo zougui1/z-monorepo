@@ -1,0 +1,90 @@
+{
+  "name": "@zougui/prototype.react-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts -r @zougui/common.env/config start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.4.1",
+    "@mui/material": "^5.4.1",
+    "@mui/styles": "^5.4.2",
+    "@reduxjs/toolkit": "^1.7.2",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^16.11.24",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "@zougui/common.env": "workspace:^0.5.1",
+    "@zougui/common.http-core": "workspace:^0.2.1",
+    "@zougui/common.ms": "workspace:^0.1.1",
+    "@zougui/common.react-utils": "workspace:^0.2.0",
+    "clsx": "^1.1.1",
+    "d3": "^7.3.0",
+    "d3tooltip": "^2.1.0",
+    "deep-object-diff": "^1.1.7",
+    "deepmerge": "^4.2.2",
+    "immer": "^9.0.12",
+    "joi": "^17.6.0",
+    "lodash": "^4.17.21",
+    "map2tree": "^2.1.0",
+    "match-sorter": "^6.3.1",
+    "nanoid": "^3.3.1",
+    "pretty-ms": "^7.0.1",
+    "ramda": "^0.28.0",
+    "react": "^17.0.2",
+    "react-dock": "^0.5.1",
+    "react-dom": "^17.0.2",
+    "react-query": "^3.34.14",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "5.0.0",
+    "react-syntax-highlighter": "^15.4.5",
+    "react-use": "^17.3.2",
+    "recharts": "^2.1.9",
+    "redux": "^4.1.2",
+    "reselect": "^4.1.5",
+    "stacktracey": "^2.1.8",
+    "typescript": "^4.5.5",
+    "use-sync-external-store": "^1.0.0-rc.0",
+    "uuid": "^8.3.2",
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11",
+    "zod": "^3.11.6"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.1.0",
+    "@types/lodash": "^4.14.178",
+    "@types/ramda": "^0.28.1",
+    "@types/react-syntax-highlighter": "^13.5.2",
+    "@types/use-sync-external-store": "^0.0.3",
+    "@types/uuid": "^8.3.4",
+    "@zougui/common.jest-config": "workspace:^0.1.3",
+    "@zougui/common.tsconfigs": "workspace:^0.2.1"
+  }
+}

@@ -5,7 +5,7 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "sourceMap": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "inlineSources": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -24,7 +24,12 @@
     ],
     "rootDir": "src",
     "outDir": "lib",
-    "target": "es2017"
+    "target": "es2017",
+    "plugins": [
+      {
+        "transform": "tst-reflect-transformer"
+      }
+    ]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.spec.*"]

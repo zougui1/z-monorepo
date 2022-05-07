@@ -23,27 +23,21 @@ export const createMediaRefs = async (media: MediaCreation): Promise<MediaCreati
  */
 const createMediaUserRefs = async (media: MediaCreation): Promise<MediaCreation> => {
   const authorsDocs = await createRefList(
-    [
-      ...media.authors,
-      ...media.variants.flatMap(variant => variant.authors),
-    ],
+    media.posts.flatMap(post => post.authors),
     userQueries.createMany,
     author => author.name,
   );
 
-  const authors = getAuthorsFromDocuments(media.authors, authorsDocs);
-
-  const variants = media.variants.map(variant => {
+  const posts = media.posts.map(post => {
     return {
-      ...variant,
-      authors: getAuthorsFromDocuments(variant.authors, authorsDocs),
+      ...post,
+      authors: getAuthorsFromDocuments(post.authors, authorsDocs),
     };
   });
 
   return {
     ...media,
-    authors,
-    variants,
+    posts,
   };
 }
 

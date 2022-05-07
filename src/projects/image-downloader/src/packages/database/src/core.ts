@@ -45,3 +45,5 @@ export interface WithTimestamps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type OmitTimestamps<T extends Record<string, any>> = Omit<T, 'createdAt' | 'updatedAt'>;

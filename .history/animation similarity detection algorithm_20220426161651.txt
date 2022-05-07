@@ -1,0 +1,20 @@
+Animation similarity detection algorithm:
+
+Minimum frames in a row below distance similarity threshold: 10% of the frames of the animation with the most frames OR at least 2 frames
+From the least framed animation, compare the first of its frames with every frame of the longer animation, if two frames' are below the distance similarity threshold, then go onwards with the other frames of the shorter animation, compare the current frame of the shorter animation (first frame if first iteration) with the next frame of the longer animation, if the distance is not below the similarity threshold, then try with the next frame of the shorter animation, continue to do that until 2 frames' distance gets below the similarity threshold OR the number of frames that did not match is greater than 33% of the minimum frames in a row that have to match, if that happens, continue to match the frames of the shorter animation with the frames of the longer animation one frame at a time
+
+Example:
+If the longer animation lasts 5 seconds and has 300 frames (60 fps)
+And the shorter animation lasts 1 second and has 60 frames (60 fps)
+Then the minimum number of frames that have to match in a row will be 30.
+If two frames match, the next 9 frames are allowed not to match, but the next 10th frame has to match or the comparison will fail.
+This allows for similarity check between two animations with a different framerate
+
+Let's say the 5th frame of the shorter animation matches with the 77th frame of the longer animation.
+Try to match the 5th frame with the 78th:
+- if that works: try to match the 5th frame with the 79th frame, etc...
+- if that doesn't work: try to match the 6th frame with the 78th frame:
+  - if that works: 6th frame with the 79th frame, etc...
+ - if that doesn't work: 7th frame with the 78th frame, etc... Until the 15th frame:
+    - if the 15th frame matches with the 78th frame: go onwards
+    - if the 15th frame doesn't match: comparison fails. Retry from 5th frame with the 78th frame to try and find another similarity
