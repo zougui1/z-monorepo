@@ -3,9 +3,8 @@ import urlJoin from 'url-join';
 import QS from 'qs';
 import { Cancel } from 'axios';
 import * as yup from 'yup';
-import type { ObjectShape, TypeOfShape, AnyObject } from 'yup/lib/object';
 
-import { union, SchemaObject } from '@zougui/common.yup-utils';
+import { SchemaObject } from '@zougui/common.yup-utils';
 
 import { RouteTemplate } from './RouteTemplate';
 import { isHttpError, isCancel } from '../low-level-api';
@@ -20,22 +19,20 @@ import {
 
 export class Fetch<
   TData,
-  TPathParamsShape extends ObjectShape = AnyObject,
-  TPathParamsIn extends Partial<TypeOfShape<TPathParamsShape>> = Partial<TypeOfShape<TPathParamsShape>>,
-  TQueryParamsShape extends ObjectShape = AnyObject,
-  TQueryParamsIn extends Partial<TypeOfShape<TQueryParamsShape>> = Partial<TypeOfShape<TQueryParamsShape>>,
-  TBody = any,
+  TPathParamsSchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  TQueryParamsSchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  TBodySchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
 > implements Promise<HttpResponse<TData>> {
   [Symbol.toStringTag]: '[object Fetch]';
   #promise: CancellablePromise<HttpResponse<TData>> | undefined;
   #fetch: FetchFunction;
-  #body: TBody | undefined;
+  #body: SchemaObject<TBodySchema> | undefined;
   #config: HttpRequestConfigOptions = {};
-  #queryParams: SchemaObject<TQueryParamsShape>;
+  #queryParams: SchemaObject<TQueryParamsSchema>;
   #emitter: Emittery = new Emittery();
   #baseURL: string;
   #url: string;
-  #route: RouteTemplate<TPathParamsShape, TPathParamsIn>;
+  #route: RouteTemplate<TPathParamsSchema, yup.InferType<TPathParamsSchema>>;
   readonly method: HttpMethod;
 
   constructor({ method, fetch, url, baseURL }: FetchOptions) {
@@ -108,54 +105,57 @@ export class Fetch<
   //#endregion
 
   //#region params
-  setQueryParam<TKey extends keyof TypeOfShape<TQueryParamsShape> & string>(name: TKey, value: TypeOfShape<TQueryParamsShape>[TKey]): this {
+  setQueryParam<TKey extends keyof TQueryParamsSchema & string>(name: TKey, value: TQueryParamsSchema[TKey]): this {
     this.#queryParams.setValue(name, value);
     return this;
   }
 
-  setQueryParams(params: TQueryParamsIn): this {
+  setQueryParams(params: TQueryParamsSchema['__inputType']): this {
     this.#queryParams.setValues(params);
     return this;
   }
 
-  setPathParam<TKey extends keyof TypeOfShape<TPathParamsShape> & string>(name: TKey, value: TypeOfShape<TPathParamsShape>[TKey]): this {
+  setPathParam<TKey extends keyof TPathParamsSchema & string>(name: TKey, value: TPathParamsSchema[TKey]): this {
     this.#route.setParam(name, value);
     return this;
   }
 
-  setPathParams(params: TPathParamsIn): this {
+  setPathParams(params: TPathParamsSchema['__inputType']): this {
     this.#route.setParams(params);
     return this;
   }
 
-  setBody(body: TBody): this {
-    this.#body = body;
+  body<
+    TBodySchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  >(body: yup.InferType<TBodySchema>, options?: FetchBodyOptions<TBodySchema>): Fetch<TData, TPathParamsSchema, TQueryParamsSchema, TBodySchema> {
+    this.#body = new SchemaObject(body, options?.schema);
     return this;
   }
 
-  getBody(): TBody | undefined {
-    return this.#body;
-  }
-
-  getPathParams(): TPathParamsIn {
+  getPathParams(): TPathParamsSchema['__inputType'] {
     return this.#route.getParams();
   }
   //#endregion
 
   //#region schema
   setPathSchema<
-    TPathParamsShape extends ObjectShape = AnyObject,
-    TPathParamsIn extends Partial<TypeOfShape<TPathParamsShape>> = Partial<TypeOfShape<TPathParamsShape>>,
-  >(schema: yup.ObjectSchema<TPathParamsShape>): Fetch<TData, TPathParamsShape, TPathParamsIn, TQueryParamsShape, TQueryParamsIn> {
+    TPathParamsSchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  >(schema: TPathParamsSchema): Fetch<TData, TPathParamsSchema, TQueryParamsSchema, TBodySchema> {
     this.#route = new RouteTemplate(this.#url, schema as any);
     return this as any;
   }
 
   setQuerySchema<
-    TQueryParamsShape extends ObjectShape = AnyObject,
-    TQueryParamsIn extends Partial<TypeOfShape<TQueryParamsShape>> = Partial<TypeOfShape<TQueryParamsShape>>,
-  >(schema: yup.ObjectSchema<TQueryParamsShape>): Fetch<TData, TPathParamsShape, TPathParamsIn, TQueryParamsShape, TQueryParamsIn> {
+    TQueryParamsSchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  >(schema: TQueryParamsSchema): Fetch<TData, TPathParamsSchema, TQueryParamsSchema, TBodySchema> {
     this.#queryParams = new SchemaObject({} as any, schema as any);
+    return this as any;
+  }
+
+  setBodySchema<
+    TBodySchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  >(schema: TBodySchema): Fetch<TData, TPathParamsSchema, TQueryParamsSchema, TBodySchema> {
+    this.#body = new SchemaObject({} as any, schema as any);
     return this as any;
   }
   //#endregion
@@ -175,6 +175,11 @@ export class Fetch<
     this.#config.onDownloadProgress = onDownloadProgress;
     return this;
   }
+
+  withCredentials(withCredentials: boolean = true): this {
+    this.#config.withCredentials = withCredentials;
+    return this;
+  }
   //#endregion
 
   cleanup = (): void => {
@@ -186,7 +191,7 @@ export class Fetch<
     // in which case the second parameter is the config
     // if there is any data then this means it's a fetch that takes a body
     // in which case the second parameter is the body and the thirs is the config
-    const bodyOrConfig = this.#body ?? this.#config;
+    const bodyOrConfig = this.#body?.getValidValuesSync() ?? this.#config;
     this.#promise = this.#fetch(this.getURL(), bodyOrConfig, this.#config);
 
     this.#emitter.emit('exec', this);
@@ -267,4 +272,8 @@ export interface FetchOptions {
   fetch: FetchFunction,
   url: string;
   baseURL: string;
+}
+
+export interface FetchBodyOptions<TSchema extends yup.AnyObjectSchema = yup.AnyObjectSchema> {
+  schema?: TSchema | undefined;
 }

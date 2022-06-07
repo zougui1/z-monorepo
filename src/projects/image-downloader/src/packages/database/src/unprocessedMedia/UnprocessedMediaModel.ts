@@ -22,7 +22,9 @@ export enum TextAlign {
 }
 
 export class DescriptionNode {
-  @prop({ required: true })
+  // for some reason throws an error when trying to save to the collection
+  // medias with required true even though the type is present
+  @prop({ required: false })
   type!: string;
 
   @enumProp({ enum: TextAlign })

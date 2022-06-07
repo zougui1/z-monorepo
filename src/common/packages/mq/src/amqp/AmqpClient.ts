@@ -1,4 +1,5 @@
 import type { Observable } from 'rxjs';
+import type { SetOptional } from 'type-fest';
 
 import { AmqpConnector } from './AmqpConnector';
 import { AmqpQueue } from './AmqpQueue';
@@ -17,8 +18,13 @@ export class AmqpClient {
   readonly #eventConsumer: EventConsumer;
   readonly #rxConsumer: RxConsumer;
 
-  constructor(options: AmqpConnectorOptions) {
-    this.#connector = new AmqpConnector(options);
+  constructor(options?: SetOptional<AmqpConnectorOptions, 'serverUrl'> | undefined) {
+    const actualOptions: AmqpConnectorOptions = {
+      ...options,
+      serverUrl: options?.serverUrl || 'localhost',
+    };
+
+    this.#connector = new AmqpConnector(actualOptions);
     this.#eventConsumer = new EventConsumer(this.#connector);
     this.#rxConsumer = new RxConsumer(this.#connector);
   }
@@ -54,8 +60,9 @@ export class AmqpClient {
     queueName: string,
     type: string | string[],
     listener: ((message: AmqpMessage<Body>) => void),
+    options?: MessageTypedSubscribeOptions | undefined,
   ): Promise<void> => {
-    return await this.#eventConsumer.off(queueName, type, listener);
+    return await this.#eventConsumer.off(queueName, type, listener, options);
   }
 
   observe = <Body extends Record<string, any> = Record<string, unknown>>(

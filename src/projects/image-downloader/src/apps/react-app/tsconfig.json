@@ -1,0 +1,12 @@
+{
+  "extends": "@zougui/common.tsconfigs/react-app.tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "baseUrl": "src",
+    "paths": {
+      "~/*": ["*"]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

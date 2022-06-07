@@ -8,7 +8,6 @@ const animatedFormats = ['apng', 'gif', 'webp'];
 // TODO hash videos and animated images
 export const hashFile = async (filePath: string): Promise<string[]> => {
   const contentType = await fileType.fromFile(filePath);
-  console.log({ contentType })
 
   if (contentType) {
     if (animatedFormats.includes(contentType.ext)) {

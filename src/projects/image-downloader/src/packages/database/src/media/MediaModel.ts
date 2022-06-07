@@ -1,6 +1,6 @@
 import { prop, getModelForClass, Ref, ReturnModelType, modelOptions } from '@typegoose/typegoose';
 import type { BeAnObject, AnyParamConstructor } from '@typegoose/typegoose/lib/types';
-import { getType, Type } from 'tst-reflect';
+import type { Types } from 'mongoose';
 
 import type { DocumentType } from '@zougui/common.mongo-core';
 import type { WeakEnum } from '@zougui/common.type-utils';
@@ -200,6 +200,7 @@ postsChildSchema?.schema.add({
 });
 //console.log('obj', (postsChildSchema as any)?.schema.tree)
 //process.exit(0)
+export type MediaObject = Media & { _id: Types.ObjectId };
 export type MediaDocument = DocumentType<Media>;
 
 export { ReturnModelType } from '@typegoose/typegoose/lib/types';

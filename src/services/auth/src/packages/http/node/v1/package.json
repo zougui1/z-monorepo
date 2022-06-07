@@ -1,0 +1,6 @@
+{
+  "main": "../../lib/cjs/node/v1/index.js",
+  "module": "../../lib/esm/node/v1/index.js",
+  "types": "../../lib/cjs/node/v1/index.d.ts",
+  "typings": "../../lib/cjs/node/v1/index.d.ts"
+}

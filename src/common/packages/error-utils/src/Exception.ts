@@ -31,6 +31,10 @@ export class Exception<
     Error.captureStackTrace(this, this.constructor);
   }
 
+  static getErrorObject = (value: unknown): Cause => {
+    return getCause(value);
+  }
+
   toJSON(): ExceptionObject<TData, TCause> {
     const cause = this.cause instanceof Exception
       ? this.cause.toJSON()

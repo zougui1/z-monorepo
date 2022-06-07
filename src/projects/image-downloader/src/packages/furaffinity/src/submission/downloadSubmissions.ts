@@ -12,7 +12,7 @@ export const downloadSubmissions = async (submissions: (IResult | ISubmission)[]
 
   for (const submissionResult of submissions) {
     try {
-      const { result: submission } = await findSubmission(submissionResult.id);
+      const submission = await findSubmission(submissionResult.id);
 
       if (submission) {
         downloadedSubmissions.push(formatSubmission(submission));

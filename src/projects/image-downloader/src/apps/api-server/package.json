@@ -24,6 +24,7 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@zougui/common.config": "workspace:^0.1.0",
     "@zougui/common.env": "workspace:^0.5.1",
     "@zougui/common.error-utils": "workspace:^0.1.0",
     "@zougui/common.fs-utils": "workspace:^0.1.0",
@@ -34,6 +35,7 @@
     "@zougui/image-downloader.furaffinity": "workspace:^0.2.0",
     "@zougui/image-downloader.media": "workspace:^0.1.0",
     "axios": "^0.25.0",
+    "express": "^4.18.1",
     "fast-levenshtein": "^3.0.0",
     "file-type": "^16.5.3",
     "fs-extra": "^10.0.1",
@@ -53,6 +55,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "sharp": "^0.30.4",
+    "spdy": "^4.0.2",
     "string-strip-html": "8.3.0",
     "uuid": "^8.3.2",
     "yup": "^0.32.11"
@@ -69,6 +72,7 @@
     "@types/node": "^16.0.0",
     "@types/probe-image-size": "^7.0.1",
     "@types/sharp": "^0.30.2",
+    "@types/spdy": "^3.4.5",
     "@types/supertest": "^2.0.11",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
@@ -85,7 +89,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.10.1",
-    "typescript": "^4.6.3"
+    "typescript": "^4.5.4"
   },
   "jest": {
     "moduleFileExtensions": [

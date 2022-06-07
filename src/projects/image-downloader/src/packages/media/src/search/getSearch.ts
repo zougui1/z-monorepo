@@ -1,4 +1,4 @@
-import { searchQueries, SearchDocument } from '@zougui/image-downloader.database';
+import { searchQueries, SearchObject } from '@zougui/image-downloader.database';
 import { createException } from '@zougui/common.error-utils';
 import { createLog, createTaskLogs, logger } from '@zougui/log.logger/node';
 
@@ -30,7 +30,7 @@ const CreateSearchError = createException<void, unknown>({
 //#endregion
 
 //#region get search logging
-const GetSearchTaskLog = createTaskLogs<{ args: [] }, { result: SearchDocument }, Error>({
+const GetSearchTaskLog = createTaskLogs<{ args: [] }, { result: SearchObject }, Error>({
   baseCode: 'image-downloader.media.getSearch',
   namespace: 'zougui:image-downloader:media',
   version: 'v1',
@@ -42,9 +42,9 @@ const GetSearchTaskLog = createTaskLogs<{ args: [] }, { result: SearchDocument }
 });
 //#endregion
 
-export const getSearch = GetSearchTaskLog.wrap(async (): Promise<SearchDocument> => {
+export const getSearch = GetSearchTaskLog.wrap(async (): Promise<SearchObject> => {
   const [searchMaybe] = await searchQueries
-    .findMany({}, { query: 1, options: 1 })
+    .findMany({}, { query: 1, cursors: 1 })
     .catch(cause => {
       const error = new FindSearchError({ cause });
       logger.warn(new FindSearchErrorLog({ cause: error }));
@@ -57,11 +57,7 @@ export const getSearch = GetSearchTaskLog.wrap(async (): Promise<SearchDocument>
 
   try {
     const newSearch = await searchQueries.create({
-      options: {
-        page: 1,
-        orderBy: 'relevancy',
-        range: 'all',
-      },
+      cursors: [],
       origin: {
         name: 'furaffinity',
         url: 'https://www.furaffinity.net/search',

@@ -152,7 +152,6 @@ const getDescriptionNodes = (element: Element): DescriptionNode[] => {
           attributes,
           children: childElement && getDescriptionNodes(childElement),
         });
-        console.log('unhandled node type:', nodeName);
         break;
     }
   }

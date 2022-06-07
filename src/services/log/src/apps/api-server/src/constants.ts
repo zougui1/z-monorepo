@@ -1,3 +1,3 @@
-import env from '@zougui/common.env';
+import config from '@zougui/common.config/node';
 
-export const port = env.get('API_SERVER_PORT').required().asPortNumber();
+export const port = config.log.apiServer.port;

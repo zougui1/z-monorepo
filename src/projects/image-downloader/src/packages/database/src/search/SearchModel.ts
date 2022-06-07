@@ -1,6 +1,6 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
+import type { Types } from 'mongoose';
 
-import { OrderBy, OrderDirection, RangeType } from '@zougui/image-downloader.furaffinity';
 import type { DocumentType } from '@zougui/common.mongo-core';
 import type { WeakEnum } from '@zougui/common.type-utils';
 
@@ -21,24 +21,15 @@ export enum SearchStatus {
   Error = 'error',
 }
 
-export class SearchOptions {
-  @enumProp({ enum: OrderBy })
-  orderBy?: WeakEnum<OrderBy> | undefined;
+export class SearchCursor {
+  @prop({ type: Date, required: true })
+  date!: Date;
 
-  @enumProp({ enum: OrderDirection })
-  orderDirection?: WeakEnum<OrderDirection> | undefined;
+  @prop({ default: 1 })
+  currentPage!: number;
 
-  @prop({ type: Number, default: 1 })
-  page?: number | undefined;
-
-  @enumProp({ enum: RangeType })
-  range?: WeakEnum<RangeType> | undefined;
-
-  @prop({ type: Date })
-  rangeFrom?: Date | undefined;
-
-  @prop({ type: Date })
-  rangeTo?: Date | undefined;
+  @prop({ default: 1 })
+  pageCount!: number;
 }
 
 export interface Search extends WithTimestamps {}
@@ -54,16 +45,17 @@ export class Search {
   @enumProp({ enum: SearchStatus, default: SearchStatus.Idle })
   status!: WeakEnum<SearchStatus>;
 
-  @prop({ default: {}, _id: false, type: () => SearchOptions })
-  options!: SearchOptions;
-
   /**
    * can be an ID or a URL
    */
   @prop({ type: [String], default: [] })
   failedToDownload!: string[];
+
+  @prop({ type: [SearchCursor], default: [], _id: false })
+  cursors!: SearchCursor[];
 }
 
 export const SearchModel = getModelForClass(Search);
-
+export type SearchObject = Search & { _id: Types.ObjectId };
 export type SearchDocument = DocumentType<Search>;
+export * from '@typegoose/typegoose/lib/types';

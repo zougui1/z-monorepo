@@ -40,12 +40,14 @@ export class AmqpConnectionPool {
 
   async close(): Promise<void> {
     const connections = Array.from(this.#openConnections)
+    console.log(connections.length)
     await Promise.all(connections.map(async connection => {
       await this.closeConnection(connection);
     }));
   }
 
   async closeConnection(connection: Connection): Promise<void> {
+    console.log('close connection', Boolean(connection))
     await connection.close();
     this.#openConnections.delete(connection);
   }

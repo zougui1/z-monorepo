@@ -138,10 +138,6 @@ export const createTaskLogs = <
           },
         });
 
-        if (isThenable(res)) {
-          return res.then((result: PromiseValue<ReturnType<TFunc>>) => ({ result }));
-        }
-
         return res;
       }
     }
@@ -305,7 +301,7 @@ export type TaskLogsConstructor<
           ? TFunc
           : void
         : void
-    ) => ((...args: Args<TStartData> extends any[] ? Args<TStartData> : any[]) => Promisify<ReturnType<TFunc>, Result<TSuccessData>, TSuccessData>)
+    ) => ((...args: Args<TStartData> extends any[] ? Args<TStartData> : any[]) => Promisify<ReturnType<TFunc>, Result<TSuccessData>, Result<TSuccessData>>)
     : void;
 } & Constructor<TaskLogs<TStartData, TSuccessData, TErrorCause, TStartDataOut, TSuccessDataOut, TErrorCauseOut>>;
 

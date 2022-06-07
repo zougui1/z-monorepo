@@ -3,17 +3,17 @@ import type { Connection, Channel, Replies } from 'amqplib';
 import { toArray } from '@zougui/common.array';
 
 import type { AmqpConnector } from './AmqpConnector';
-import type { AmqpMessage, MessageTypedSubscribeOptions } from './types';
+import type { AmqpMessage, MessageTypedSubscribeOptions, MessageListener } from './types';
 
 export class EventConsumer {
   #connector: AmqpConnector;
-  #listeners: Map<string, Map<Listener<any>, { connection: Connection; channel: Channel }>> = new Map();
+  #listeners: Map<string, Map<MessageListener<any>, { connection: Connection; channel: Channel }>> = new Map();
   /**
    * is needed to map from external listener: given to `this.once`
    * to the internal listener: wrapper around the external listener
    * which automatically remove itself once executed
    */
-  #listenersMap: Map<Listener<any>, Listener<any>> = new Map();
+  #listenersMap: Map<MessageListener<any>, MessageListener<any>> = new Map();
 
   constructor(connector: AmqpConnector) {
     this.#connector = connector;
@@ -22,7 +22,7 @@ export class EventConsumer {
   async on<Body extends Record<string, any> = Record<string, unknown>>(
     queueName: string,
     type: string | string[],
-    listener: Listener<Body>,
+    listener: MessageListener<Body>,
     options?: MessageTypedSubscribeOptions | undefined,
   ): Promise<void> {
     const types = toArray(type);
@@ -44,7 +44,7 @@ export class EventConsumer {
   async once<Body extends Record<string, any> = Record<string, unknown>>(
     queueName: string,
     type: string | string[],
-    listener: Listener<Body>,
+    listener: MessageListener<Body>,
     options?: MessageTypedSubscribeOptions | undefined,
   ): Promise<void> {
     const handler = async (message: AmqpMessage<Body>): Promise<void> => {
@@ -62,27 +62,23 @@ export class EventConsumer {
   async off<Body extends Record<string, any> = Record<string, unknown>>(
     queueName: string,
     type: string | string[],
-    listener: Listener<Body>,
+    listener: MessageListener<Body>,
+    options?: MessageTypedSubscribeOptions | undefined,
   ): Promise<void> {
     if (typeof type === 'string') {
       const eventName = getEventName(queueName, type);
-
-
       const mqMap = this.#listeners.get(eventName);
+      await this.#connector.unsubscribe(queueName, listener, {
+        ...(options || {}),
+        types: [type],
+      });
 
       if (!mqMap) {
         return;
       }
 
       const actualListener = this.#listenersMap.get(listener) || listener;
-      const { connection, channel } = mqMap.get(actualListener) || {};
-
       mqMap.delete(actualListener);
-      await channel?.close();
-
-      if (connection) {
-        await this.#connector.closeConnection(connection);
-      }
 
       return;
     }
@@ -93,7 +89,7 @@ export class EventConsumer {
   private async subscribe<Body extends Record<string, any> = Record<string, unknown>>(
     queueName: string,
     types: string[],
-    listener: Listener<Body>,
+    listener: MessageListener<Body>,
     options?: MessageTypedSubscribeOptions | undefined,
   ): Promise<{ connection: Connection, channel: Channel, queue: Replies.AssertQueue }> {
     return await this.#connector.subscribe(queueName, listener, {
@@ -110,5 +106,3 @@ const getEventName = (queueName: string, type: string): string => {
 const getEventNames = (queueName: string, types: string[]): string[] => {
   return types.map(type => getEventName(queueName, type));
 }
-
-export type Listener<Body extends Record<string, any> = Record<string, unknown>> = (message: AmqpMessage<Body>) => void | Promise<void>;

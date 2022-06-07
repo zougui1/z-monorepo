@@ -5,10 +5,10 @@ import type { ConnectOptions } from './types';
 
 const preventConnectionStates = [mongoose.ConnectionStates.connected, mongoose.ConnectionStates.connecting];
 
-export const connectOnce = async (options: ConnectOptions, mongoOptions?: mongoose.ConnectOptions | undefined): Promise<typeof mongoose> => {
+export const connectOnce = async (options: ConnectOptions, mongoOptions?: mongoose.ConnectOptions | undefined): Promise<void> => {
   if (preventConnectionStates.includes(mongoose.connection.readyState)) {
-    return mongoose;
+    return;
   }
 
-  return await connect(options, mongoOptions);
+  await connect(options, mongoOptions);
 }

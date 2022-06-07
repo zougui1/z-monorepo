@@ -22,6 +22,7 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@zougui/common.config": "workspace:^0.1.0",
     "@zougui/common.env": "workspace:^0.5.1",
     "@zougui/common.error-utils": "workspace:^0.1.0",
     "@zougui/log.database": "workspace:^0.1.0",
@@ -47,7 +48,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.10.1",
-    "typescript": "^4.6.3"
+    "typescript": "^4.5.4"
   },
   "jest": {
     "moduleFileExtensions": [

@@ -35,11 +35,11 @@ const SearchTask = createTaskLogs<{ args: FaSearchSubmissionsParams }, { result:
     error: ({ cause }) => new FuraffinitySearchError({ cause }),
   })
   .messages({
-    start: ({ data }) => `Searching submissions on furaffinity with query "${data.query}"`,
+    start: ({ data }) => `Searching submissions on furaffinity (query = "${data.query}")`,
     success: ({ data }) => `Found ${data.submissions.length} submissions.`,
     error: ({ cause }) => cause.message,
   });
 
-export type SearchSubmissions = (...args: FaSearchSubmissionsParams) => Promise<{ result: FaSearchSubmissionsResolveType }>;
+export type SearchSubmissions = (...args: FaSearchSubmissionsParams) => Promise<FaSearchSubmissionsResolveType>;
 export const searchSubmissions: SearchSubmissions = SearchTask.wrap(wrapLogin(faSearch));
 export { SearchOptions };

@@ -1,6 +1,5 @@
 import path from 'node:path';
 
-import env from '@zougui/common.env/node';
+import config from '@zougui/common.config/node';
 
-export const mediaDir = path.join(env.APP_WORKSPACE, 'medias');
-export const mediaVariantsDir = path.join(mediaDir, 'variants');
+export const { mediaDir, mediaVariantsDir } = config.media.fs;

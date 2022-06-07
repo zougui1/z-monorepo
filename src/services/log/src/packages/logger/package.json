@@ -30,13 +30,15 @@
     "source-map-support": "^0.5.21",
     "ts-jest": "^27.1.3",
     "type-fest": "^2.12.1",
-    "typescript": "^4.6.3"
+    "typescript": "^4.5.4"
   },
   "keywords": [],
   "repository": "https://github.com/zougui1/z-monorepo/tree/main/templates/package",
   "author": "Zougui",
   "license": "ISC",
   "dependencies": {
+    "@zougui/common.array": "workspace:^0.1.0",
+    "@zougui/common.config": "workspace:^0.1.0",
     "@zougui/common.env": "workspace:^0.5.1",
     "@zougui/common.error-utils": "workspace:^0.1.0",
     "@zougui/common.function-utils": "workspace:^0.1.0",

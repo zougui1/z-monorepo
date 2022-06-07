@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import {
   Controller,
   Get,
@@ -6,14 +8,17 @@ import {
   Options,
   Res,
   UsePipes,
+  HttpStatus,
+  Param,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import * as yup from 'yup';
+import fs from 'fs-extra';
 
-import { connect } from '@zougui/image-downloader.database';
+import { mediaQueries, UnprocessedMediaModel, MediaModel, SearchModel } from '@zougui/image-downloader.database';
 import { saveMedia, downloadFuraffinity } from '@zougui/image-downloader.media';
+import config from '@zougui/common.config/node';
 
-import { AppService } from './app.service';
 import { YupValidationPipe } from './YupValidationPipe';
 import { allowCors } from './allowCors';
 
@@ -44,11 +49,38 @@ const mediaCreationBodySchema = yup.object({
 
 @Controller('/api/v1')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('/medias')
+  async getMedias(@Res() res: Response) {
+    allowCors(res);
+
+    const medias = await mediaQueries.findMany();
+    console.log('medias:', medias.length)
+
+    res.status(HttpStatus.OK).json(medias);
+  }
+
+  @Get('/medias/file/:fileName')
+  async getFile(@Res() res: Response, @Param('fileName') fileName: string) {
+    allowCors(res);
+
+    const imageFile = path.join(config.media.fs.mediaDir, fileName);
+    const imageVariantFile = path.join(config.media.fs.mediaVariantsDir, fileName);
+
+    if (await fs.pathExists(imageFile)) {
+      const stream = fs.createReadStream(imageFile);
+      stream.pipe(res);
+      return;
+    }
+
+    if (await fs.pathExists(imageVariantFile)) {
+      const stream = fs.createReadStream(imageVariantFile);
+      stream.pipe(res);
+      return;
+    }
+
+    throw new Error('file not found');
   }
 
   @Post('/media')
@@ -67,8 +99,8 @@ export class AppController {
 }
 
 (async () => {
-  await connect();
-  //await UnprocessedMediaModel.deleteMany();
-  //await MediaModel.deleteMany();
-  await downloadFuraffinity();
+  /*await SearchModel.deleteMany();
+  await UnprocessedMediaModel.deleteMany();
+  await MediaModel.deleteMany();*/
+  //await downloadFuraffinity();
 })();

@@ -38,7 +38,7 @@ export class Logger extends BaseLogger {
 }
 
 export interface LoggerConfig {
-  loggers?: WeakEnum<LogKind>[] | undefined;
+  loggers?: WeakEnum<LogKind>[] | string[] | readonly string[] | undefined;
   console?: BaseLoggerConfig | undefined;
   http?: HttpLoggerConfig | undefined;
 }

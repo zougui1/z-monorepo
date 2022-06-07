@@ -1,11 +1,9 @@
-import mongoose from 'mongoose';
-
 import mongoCore from '@zougui/common.mongo-core';
 
 import { dbName, host, port, username, password } from './constants';
 
-export const connect = (): Promise<typeof mongoose> => {
-  return mongoCore.connect({
+export const connect = async (): Promise<void> => {
+  await mongoCore.connect({
     dbName,
     host,
     port,

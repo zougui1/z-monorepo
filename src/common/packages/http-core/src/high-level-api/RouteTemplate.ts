@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import type { ObjectShape, TypeOfShape, AnyObject } from 'yup/lib/object';
+import type { ObjectShape } from 'yup/lib/object';
 
 import { union, SchemaObject } from '@zougui/common.yup-utils';
 
@@ -9,13 +9,13 @@ import { RouteComponent } from '../types';
 const getDefaultPathParamSchema = () => union(yup.string().strict(), yup.number());
 
 export class RouteTemplate<
-  TParamsShape extends ObjectShape = AnyObject,
-  TParamsIn extends Partial<TypeOfShape<TParamsShape>> = Partial<TypeOfShape<TParamsShape>>,
+  TSchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  TIn extends TSchema['__inputType'] = TSchema['__inputType'],
 > {
   #components: RouteComponent[];
-  #params: SchemaObject<TParamsShape>;
+  #params: SchemaObject<TSchema>;
 
-  constructor(route: string, schema?: yup.ObjectSchema<TParamsShape>) {
+  constructor(route: string, schema?: TSchema) {
     this.#params = new SchemaObject({} as any, schema as any);
     this.#components = processRouteTemplate(route);
   }
@@ -54,17 +54,17 @@ export class RouteTemplate<
     return pathComponents.join('/');
   }
 
-  setParam<TKey extends keyof TypeOfShape<TParamsShape> & string>(name: TKey, value: TypeOfShape<TParamsShape>[TKey]): this {
+  setParam<TKey extends keyof TIn & string>(name: TKey, value: TIn[TKey]): this {
     this.#params.setValue(name, value);
     return this;
   }
 
-  setParams(values: TParamsIn): this {
+  setParams(values: TIn): this {
     this.#params.setValues(values);
     return this;
   }
 
-  getParams(): TParamsIn {
-    return this.#params.getValues() as TParamsIn;
+  getParams(): TIn {
+    return this.#params.getValues() as TIn;
   }
 }

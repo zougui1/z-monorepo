@@ -45,8 +45,9 @@ export class AmqpQueue {
   off = async <Body extends Record<string, any> = Record<string, unknown>>(
     type: string | string[],
     listener: ((message: AmqpMessage<Body>) => void),
+    options?: MessageTypedSubscribeOptions | undefined,
   ): Promise<void> => {
-    return await this.#client.off(this.#queueName, type, listener);
+    return await this.#client.off(this.#queueName, type, listener, options);
   }
 
   observe = <Body extends Record<string, any> = Record<string, unknown>>(

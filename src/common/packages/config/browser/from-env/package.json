@@ -1,0 +1,5 @@
+{
+  "main": "../../lib/cjs/browser/from-env/index.js",
+  "types": "../../lib/cjs/browser/from-env/index.d.ts",
+  "module": "../../lib/esm/browser/from-env/index.js"
+}

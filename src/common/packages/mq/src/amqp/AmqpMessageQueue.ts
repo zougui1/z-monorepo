@@ -26,11 +26,11 @@ export class AmqpMessageQueue<
 
   publish = async (
     body: InferType<BodySchema>,
-    headers: InferType<HeadersSchema>,
+    headers?: InferType<HeadersSchema> | undefined,
   ): Promise<void> => {
     const { version, type } = this.#options;
     const actualHeaders: AmqpMessageHeadersOptions = {
-      ...(headers as AmqpMessageHeadersOptions),
+      ...(headers || {} as AmqpMessageHeadersOptions),
       version,
       messageType: type,
     };
@@ -60,9 +60,11 @@ export class AmqpMessageQueue<
 
   off = async (
     listener: ((message: AmqpMessage<InferType<BodySchema>, InferType<HeadersSchema> & AmqpMessageHeaders>) => void),
+    options?: MessageTypedSubscribeOptions | undefined,
   ): Promise<void> => {
     const { type } = this.#options;
-    return await this.#client.off(this.#queueName, type, listener);
+    const actualOptions = this.getSubscribeOptions(options);
+    return await this.#client.off(this.#queueName, type, listener, actualOptions);
   }
 
   observe = (

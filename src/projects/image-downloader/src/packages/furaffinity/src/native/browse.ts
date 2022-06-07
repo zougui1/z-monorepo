@@ -35,5 +35,5 @@ const BrowseTask = createTaskLogs<{ args: FaBrowseParams }, { result: FaBrowseRe
     error: ({ cause }) => cause.message,
   });
 
-export type Browse = (...args: FaBrowseParams) => Promise<{ result: FaBrowseResolveType }>;
+export type Browse = (...args: FaBrowseParams) => Promise<FaBrowseResolveType>;
 export const browse: Browse = BrowseTask.wrap(wrapLogin(faBrowse));

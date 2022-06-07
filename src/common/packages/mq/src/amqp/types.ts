@@ -47,3 +47,5 @@ export interface AmqpPublishOptions {
   bodySchema?: AnyObjectSchema | undefined;
   headersSchema?: AnyObjectSchema | undefined;
 }
+
+export type MessageListener<Body extends Record<string, any> = Record<string, unknown>> = (message: AmqpMessage<Body>) => void | Promise<void>;

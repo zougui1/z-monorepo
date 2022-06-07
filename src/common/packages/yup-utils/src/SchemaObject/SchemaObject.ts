@@ -1,13 +1,12 @@
 import * as yup from 'yup';
-import type { ObjectShape, TypeOfShape, AnyObject } from 'yup/lib/object';
 
-export class SchemaObject<TShape extends ObjectShape = AnyObject, TIn extends TypeOfShape<TShape> = TypeOfShape<TShape>> {
+export class SchemaObject<TSchema extends yup.AnyObjectSchema = yup.AnyObjectSchema, TIn extends TSchema['__inputType'] = TSchema['__inputType']> {
   #values: TIn;
-  #schema: yup.ObjectSchema<TShape>;
+  #schema: TSchema;
 
-  constructor(values: TIn, schema?: yup.ObjectSchema<TShape>) {
+  constructor(values: TIn, schema?: TSchema) {
     this.#values = { ...values };
-    this.#schema = schema ?? yup.object();
+    this.#schema = schema ?? yup.object() as TSchema;
   }
 
   //#region value setters
@@ -38,32 +37,26 @@ export class SchemaObject<TShape extends ObjectShape = AnyObject, TIn extends Ty
     return this.#schema.isValidSync(this.#values);
   }
 
-  validate(): Promise<yup.ObjectSchema<TShape>['__outputType']> {
+  validate(): Promise<yup.InferType<TSchema>> {
     return this.#schema.validate(this.#values);
   }
 
-  validateSync(): yup.ObjectSchema<TShape>['__outputType'] {
+  validateSync(): yup.InferType<TSchema> {
     return this.#schema.validateSync(this.#values);
   }
 
-  cast(): TypeOfShape<TShape> {
+  cast(): yup.InferType<TSchema> {
     return this.#schema.cast(this.#values);
   }
   //#endregion
 
-  async getValidValues(): Promise<yup.ObjectSchema<TShape>['__outputType']> {
+  async getValidValues(): Promise<yup.InferType<TSchema>> {
     await this.validate();
     return this.cast();
   }
 
-  getValidValuesSync(): yup.ObjectSchema<TShape>['__outputType'] {
+  getValidValuesSync(): yup.InferType<TSchema> {
     this.validateSync();
     return this.cast();
   }
-}
-
-export {
-  ObjectShape,
-  TypeOfShape,
-  AnyObject,
 }

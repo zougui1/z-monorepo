@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import type { ResponseResolver, RestRequest, RestContext } from 'msw';
-import type { ObjectShape, TypeOfShape, AnyObject } from 'yup/lib/object';
+import * as yup from 'yup';
 
 import { Fetch } from './Fetch';
 import { HttpSource } from './HttpSource';
@@ -18,12 +18,11 @@ export class MockHttpSource<T extends HttpSource> {
 
   protected mock<
     TResponse,
-    TQueryParamsShape extends ObjectShape = AnyObject,
-    TBody = any,
-    TQueryParamsIn extends TypeOfShape<TQueryParamsShape> = TypeOfShape<TQueryParamsShape>,
+    TQueryParamsSchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+    TBodySchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
   >(
-    fetch: Fetch<TResponse, any, any, TQueryParamsShape, Partial<TQueryParamsIn>, TBody>,
-    resolver: ResponseResolver<RestRequest<TBody, AsPathParam<TQueryParamsIn>>, RestContext, TResponse>
+    fetch: Fetch<TResponse, any, TQueryParamsSchema, TBodySchema>,
+    resolver: ResponseResolver<RestRequest<yup.InferType<TBodySchema>, AsPathParam<TQueryParamsSchema['__inputType']>>, RestContext, TResponse>
   ) {
     return rest[fetch.method](fetch.getRoute(), resolver);
   }

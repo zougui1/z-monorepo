@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { getModelForClass, modelOptions } from '@typegoose/typegoose';
 
 import { Prop, EnumProp, DocumentType } from '@zougui/common.mongo-core';
@@ -50,7 +49,7 @@ export class EnvironmentProcess {
   /**
    * @env {node}
    */
-  @Prop({ type: mongoose.Schema.Types.Mixed, required: false, _id: false })
+  @Prop({ /*type: mongoose.Schema.Types.Mixed, */required: false, _id: false })
   versions?: NodeJS.ProcessVersions | undefined;
 
   /**
@@ -150,10 +149,10 @@ export class Log {
   @Prop()
   message!: string;
 
-  @Prop({ type: mongoose.Schema.Types.Mixed })
+  @Prop({ /*type: mongoose.Schema.Types.Mixed */})
   data!: UnknownObject;
 
-  @Prop({ type: mongoose.Schema.Types.Mixed, required: false, _id: false })
+  @Prop({ /*type: mongoose.Schema.Types.Mixed,*/ required: false, _id: false })
   cause?: Cause | undefined;
 
   @Prop({ type: String })
@@ -169,7 +168,15 @@ export class Log {
   timings?: Timings | undefined;
 }
 
-export const LogModel = getModelForClass(Log);
+export const logModels = {
+  Dev: getModelForClass(Log, {
+    options: { customName: 'logs_dev' },
+  }),
+  Production: getModelForClass(Log, {
+    options: { customName: 'logs_production' },
+  }),
+};
+
 export type LogDocument = DocumentType<Log>;
 
 export { ReturnModelType } from '@typegoose/typegoose/lib/types';

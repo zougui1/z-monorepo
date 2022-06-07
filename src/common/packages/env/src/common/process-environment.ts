@@ -23,3 +23,7 @@ export const getIsBrowser = (): boolean => {
     document.nodeType === 9
   );
 }
+
+export const getIsCommonJs = (): boolean => {
+  return typeof module === 'object';
+}

@@ -40,6 +40,6 @@ const SearchTask = createTaskLogs<{ args: FaFindSubmissionParams }, { result: Fa
     error: ({ cause }) => cause.message,
   });
 
-export type FindSubmission = (...args: FaFindSubmissionParams) => Promise<{ result: FaFindSubmissionResolveType }>;
+export type FindSubmission = (...args: FaFindSubmissionParams) => Promise<FaFindSubmissionResolveType>;
 export const findSubmission: FindSubmission = SearchTask.wrap(wrapLogin(faFindSubmission));
 export { ISubmission, IResult };

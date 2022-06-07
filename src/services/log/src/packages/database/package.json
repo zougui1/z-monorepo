@@ -27,7 +27,7 @@
     "jest-extended": "^2.0.0",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.1.3",
-    "typescript": "^4.6.3"
+    "typescript": "^4.5.4"
   },
   "keywords": [],
   "repository": "https://github.com/zougui1/z-monorepo/tree/main/templates/package",
@@ -35,9 +35,11 @@
   "license": "ISC",
   "dependencies": {
     "@typegoose/typegoose": "^9.7.1",
+    "@zougui/common.config": "workspace:^0.1.0",
     "@zougui/common.env": "workspace:^0.5.1",
     "@zougui/common.error-utils": "workspace:^0.1.0",
     "@zougui/common.mongo-core": "workspace:^0.3.0",
-    "mongoose": "^6.2.11"
+    "mongoose": "^6.2.11",
+    "nanoid": "^3.3.1"
   }
 }

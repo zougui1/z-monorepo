@@ -1,0 +1,5 @@
+{
+  "main": "../lib/cjs/browser/index.js",
+  "types": "../lib/cjs/browser/index.d.ts",
+  "module": "../lib/esm/browser/index.js"
+}

@@ -14,10 +14,14 @@ export const validateBody = async <Schema extends AnyObjectSchema>(
 export const validateHeaders = async <Schema extends AnyObjectSchema>(
   headers: unknown,
   schema: Schema | undefined,
-): Promise<InferType<Schema>> => {
+): Promise<InferType<Schema> & InferType<typeof headersSchema>> => {
   const validatedHeaders = schema
     ? await schema.validate(headers)
     : headers;
 
   return await headersSchema.validate(validatedHeaders);
 }
+
+export type { AnyObject } from 'yup/lib/types';
+export type { RequiredStringSchema } from 'yup/lib/string';
+export type { RequiredObjectSchema } from 'yup/lib/object';

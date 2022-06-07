@@ -1,4 +1,6 @@
-import { makeMultiImagePreviews, Percent, MultiPreviewsResult } from '@zougui/common.fs-utils';
+import { makeMultiImagePreviews, Percent, MultiPreviewsResult, MultiOptimizeSupportedFormats } from '@zougui/common.fs-utils';
+import { createException } from '@zougui/common.error-utils';
+import { createTaskLogs } from '@zougui/log.logger/node';
 
 import { mediaVariantsDir } from '../constants';
 
@@ -8,11 +10,39 @@ const widths: Record<string, Percent | number> = {
   lg: '70%',
 };
 
-export const optimizeImage = async (filePath: string): Promise<OptimizeImageResult[]> => {
+const formats: MultiOptimizeSupportedFormats[] = ['original', 'avif', 'webp'];
+
+//#region logging
+const OptimizeImageError = createException<void, unknown>({
+  name: 'OptimizeImageError',
+  code: 'error.image-downloader.media.optimizeImage',
+  message: ({ cause }) => `An error occured while optimizing submission file: ${cause.message}`,
+  version: 'v1',
+});
+
+const OptimizeImageTaskLog = createTaskLogs<{ args: [filePath: string] }, { result: OptimizeImageResult[] }, Error>({
+  baseCode: 'image-downloader.media.downloadSubmissions',
+  namespace: 'zougui:image-downloader:media',
+  version: 'v1',
+})
+  .formatters({
+    start: ({ data }) => ({
+      filePath: data.args[0],
+    }),
+    error: ({ cause }) => new OptimizeImageError({ cause }),
+  })
+  .messages({
+    start: ({ data }) => `Optimizing submission file "${data.filePath}"`,
+    success: 'Successfully optimized submission file',
+    error: ({ cause }) => cause.message,
+  });
+//#endregion
+
+export const optimizeImage = OptimizeImageTaskLog.wrap(async (filePath: string): Promise<OptimizeImageResult[]> => {
   const results = await makeMultiImagePreviews(filePath, {
     destDir: mediaVariantsDir,
     widths: Object.values(widths),
-    formats: ['original', 'avif', 'webp'],
+    formats,
   });
 
   const labelledResults = results.map(result => {
@@ -37,6 +67,6 @@ export const optimizeImage = async (filePath: string): Promise<OptimizeImageResu
   });
 
   return labelledResults;
-}
+});
 
 export type OptimizeImageResult = MultiPreviewsResult<'original' | 'avif' | 'webp', { label: string }>;

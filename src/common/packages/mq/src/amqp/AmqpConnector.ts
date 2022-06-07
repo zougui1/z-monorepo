@@ -1,75 +1,41 @@
 import type { Connection, Channel, Replies } from 'amqplib';
 
 import { AmqpConnectionPool } from './AmqpConnectionPool';
-import { createMessageHeaders, matchMessageFilters } from './utils';
-import { logPublish, logSubscribe, logAck, logNack } from './debug-logger';
+import { SubscriptionPool } from './SubscriptionPool';
+import { createMessageHeaders } from './utils';
+import { logPublish } from './debug-logger';
 import { validateBody, validateHeaders } from './validators';
-import type { LogOptions } from './debug-logger';
 import type {
   AmqpConnectorOptions,
-  AmqpMessage,
   AmqpMessageHeadersOptions,
   AmqpSubscribeOptions,
   AmqpPublishOptions,
+  MessageListener,
 } from './types';
 
 export class AmqpConnector {
   #connections: AmqpConnectionPool;
+  #subscriptions: SubscriptionPool;
 
   constructor(options: AmqpConnectorOptions) {
     this.#connections = new AmqpConnectionPool(options);
+    this.#subscriptions = new SubscriptionPool(this.#connections);
   }
 
   async subscribe<Body extends Record<string, any> = Record<string, unknown>>(
     queueName: string,
-    callback: ((message: AmqpMessage<Body>) => void),
+    callback: MessageListener<Body>,
     options?: AmqpSubscribeOptions | undefined,
   ): Promise<{ connection: Connection, channel: Channel, queue: Replies.AssertQueue }> {
-    const { connection, channel, queue } = await this.#connections.createQueue(queueName);
+    return await this.#subscriptions.subscribe(queueName, callback, options);
+  }
 
-    channel.consume(queueName, async message => {
-      if (!message || !matchMessageFilters(message, options)) {
-        return;
-      }
-
-      const body = JSON.parse(message.content.toString());
-      const { headers } = message.properties;
-
-      const validHeaders = await validateHeaders(headers, options?.headersSchema);
-      const validBody = await validateBody(body, options?.bodySchema);
-
-      const logOptions: LogOptions = {
-        queueName,
-        body: validBody,
-        headers: validHeaders,
-      };
-
-      logSubscribe(logOptions);
-
-      let acked = false;
-
-      const ack = (allUpTo?: boolean | undefined): void => {
-        if (acked) return;
-        acked = true;
-        channel.ack(message, allUpTo);
-        logAck(logOptions);
-      }
-
-      const nack = (allUpTo?: boolean | undefined): void => {
-        channel.nack(message, allUpTo);
-        logNack(logOptions);
-      }
-
-      callback({
-        headers: validHeaders,
-        body: validBody,
-        raw: message,
-        ack,
-        nack,
-      });
-    });
-
-    return { connection, channel, queue };
+  async unsubscribe<Body extends Record<string, any> = Record<string, unknown>>(
+    queueName: string,
+    callback: MessageListener<Body>,
+    options?: AmqpSubscribeOptions | undefined,
+  ): Promise<void> {
+    return await this.#subscriptions.unsubscribe(queueName, callback, options);
   }
 
   async publish(

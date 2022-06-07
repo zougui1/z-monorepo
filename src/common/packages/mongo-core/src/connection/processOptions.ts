@@ -1,6 +1,6 @@
 import type mongoose from 'mongoose';
 
-import env from '@zougui/common.env';
+import env from '@zougui/common.env/node';
 
 import type { ConnectOptions } from './types';
 import { defaultEnvSuffix, defaultHost, defaultPort, defaultProtocol } from '../constants';

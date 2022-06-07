@@ -5,7 +5,7 @@ const reVersion = /^v[0-9]+$/;
 export const headersSchema = object({
   id: string().min(6).max(100).required(),
   publishedAt: string().required(),
-  messageType: string().min(6).max(100).required(),
+  messageType: string().min(3).max(100).required(),
   version: string().matches(reVersion).required(),
 });
 

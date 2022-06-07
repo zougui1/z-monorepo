@@ -1,0 +1,5 @@
+{
+  "main": "../lib/cjs/v1/index.js",
+  "types": "../lib/cjs/v1/index.d.ts",
+  "module": "../lib/esm/v1/index.js"
+}

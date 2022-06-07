@@ -31,17 +31,19 @@
     "tst-reflect-transformer": "^0.9.5",
     "ttypescript": "^1.5.13",
     "type-fest": "^2.12.1",
-    "typescript": "^4.6.3"
+    "typescript": "^4.5.4"
   },
   "keywords": [],
   "repository": "https://github.com/zougui1/z-monorepo/tree/main/templates/package",
   "author": "Zougui",
   "license": "ISC",
   "dependencies": {
-    "@typegoose/typegoose": "^9.7.1",
+    "@typegoose/typegoose": "^9.8.1",
+    "@zougui/common.config": "workspace:^0.1.0",
     "@zougui/common.env": "workspace:^0.5.1",
     "@zougui/common.mongo-core": "workspace:^0.3.0",
     "@zougui/image-downloader.furaffinity": "workspace:^0.2.0",
+    "@zougui/log.logger": "workspace:^0.1.0",
     "lodash": "^4.17.21",
     "mongoose": "^6.2.11",
     "tst-reflect": "^0.7.4",

@@ -1,6 +1,4 @@
-import urlJoin from 'url-join';
-// FIXME: there is a type error from yum if these are not imported
-import type { ObjectShape, TypeOfShape, AnyObject } from 'yup/lib/object';
+import * as yup from 'yup';
 
 import { Fetch } from './Fetch';
 import { createHttp, CreateHttpOptions } from '../low-level-api';
@@ -53,25 +51,29 @@ export class HttpSource {
     return this.fetch('options', this.http.options, pathname);
   }
 
-  protected post<T>(pathname: string, body: any): Fetch<T> {
-    return this.fetch<T>('post', this.http.post, pathname).setBody(body);
+  protected post<
+    TData,
+    TBodySchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  >(pathname: string, { body, ...options }: BodyOptions<TBodySchema>): Fetch<TData, any, any, TBodySchema> {
+    return this.fetch<TData>('post', this.http.post, pathname).body(body, options);
   }
 
-  protected put<T>(pathname: string, body: any): Fetch<T> {
-    return this.fetch<T>('put', this.http.put, pathname).setBody(body);
+  protected put<
+    TData,
+    TBodySchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  >(pathname: string, { body, ...options }: BodyOptions<TBodySchema>): Fetch<TData, any, any, TBodySchema> {
+    return this.fetch<TData>('put', this.http.put, pathname).body(body, options);
   }
 
-  protected patch<T>(pathname: string, body: any): Fetch<T> {
-    return this.fetch<T>('patch', this.http.patch, pathname).setBody(body);
+  protected patch<
+    TData,
+    TBodySchema extends yup.AnyObjectSchema = yup.AnyObjectSchema,
+  >(pathname: string, { body, ...options }: BodyOptions<TBodySchema>): Fetch<TData, any, any, TBodySchema> {
+    return this.fetch<TData>('patch', this.http.patch, pathname).body(body, options);
   }
+}
 
-  getUsers = (params?: { page?: number }) => {
-    return this
-      .get('/users')
-      .setQueryParams(params || {});
-  }
-
-  getSearchPage = <T>() => {
-    return this.get<T>('/search');
-  }
+export interface BodyOptions<TSchema extends yup.AnyObjectSchema = yup.AnyObjectSchema> {
+  body: yup.InferType<TSchema>;
+  schema?: TSchema | undefined;
 }

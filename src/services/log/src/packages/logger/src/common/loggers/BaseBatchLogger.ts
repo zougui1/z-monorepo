@@ -91,13 +91,15 @@ export interface BaseBatchLogger {
 }
 
 const processConfig = (config: BaseBatchLoggerConfig = {}): InternalBaseBatchLoggerConfig => {
+  const interval = config?.batch?.interval as DurationString | undefined;
+
   return {
-    interval: toMs(config?.batch?.interval || defaultBatchInterval),
+    interval: toMs(interval || defaultBatchInterval),
   };
 }
 
 export interface BaseBatchLoggerConfig extends BaseLoggerConfig {
   batch?: {
-    interval?: number | DurationString | undefined;
+    interval?: number | DurationString | string | undefined;
   } | undefined;
 }
